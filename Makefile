@@ -39,7 +39,7 @@ PARSER = escape_split parser_utils parser parser_wildcard_phase prompt_helpers \
          parser_tokens_checks parser_spacing_amp parser_spacing_redir_helpers \
          parser_spacing_redir parser_spacing_logical parser_spacing_logical_helpers parser_expand_scan parser_quotes_expand parser_quotes_core \
          parser_quotes_helpers parser_quotes_utils syntax_utils syntax_helpers_utils syntax syntax_helpers3 syntax_helpers4
-REDIR  = cmd_redir exec_redir heredoc_utils heredoc_helpers heredoc_loop heredoc_norm_utils redir_helpers redir_utils utils_redir \
+REDIR  = cmd_redir exec_redir heredoc_utils heredoc_helpers heredoc_loop heredoc_norm_utils heredoc_norm_loop_helpers redir_helpers redir_utils utils_redir \
          utils_redir2 utils_redir3
 PIPE   = pipe_core pipe_utils pipe_helpers parentheses
 

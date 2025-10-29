@@ -266,6 +266,9 @@ char	*get_heredoc_line(void);
 int	check_heredoc_signal(void);
 void	write_heredoc_line(bool expand_vars, char *line, char **envp,
 		t_node *node);
+bool	heredoc_handle_sigquit(void);
+int	heredoc_update_iteration_state(int result, int *lines_read,
+		bool *got_sigint);
 int	finalize_loop_result(int lines_read, bool got_sigint,
 		struct s_hdctx *ctx);
 int	open_redir_out(char **args, int i, t_node *node, int flags);
