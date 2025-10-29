@@ -12,6 +12,30 @@
 
 #include "mandatory.h"
 
+static bool	handle_sigquit(void)
+{
+	if (get_signal_number() != SIGQUIT)
+		return (false);
+	clear_signal_number();
+	return (true);
+}
+
+static int	handle_iteration_result(int result, int *lines_read,
+		bool *got_sigint)
+{
+	if (result == 1)
+	{
+		(*lines_read)++;
+		return (1);
+	}
+	if (result == 3)
+	{
+		*got_sigint = true;
+		return (3);
+	}
+	return (result);
+}
+
 bool	is_delimiter(const char *line, const char *delim)
 {
 	if (ft_strncmp(line, delim, ft_strlen(delim)) == 0
@@ -57,33 +81,21 @@ int	process_heredoc_iteration(struct s_hdctx *ctx)
 
 int	run_heredoc_loop(struct s_hdctx *ctx, int *lines_read, bool *got_sigint)
 {
-    int	result;
+	int	result;
 
-    *lines_read = 0;
-    *got_sigint = false;
-    while (1)
-    {
-        /* Ignore SIGQUIT inside heredoc: clear and break */
-        if (get_signal_number() == SIGQUIT)
-        {
-            clear_signal_number();
-            break ;
-        }
-        result = process_heredoc_iteration(ctx);
-        if (result == 0)
-            return (0);
-        if (result == 1)
-        {
-			(*lines_read)++;
+	*lines_read = 0;
+	*got_sigint = false;
+	while (1)
+	{
+		if (handle_sigquit())
+			break ;
+		result = process_heredoc_iteration(ctx);
+		if (result == 0)
+			return (0);
+		result = handle_iteration_result(result, lines_read, got_sigint);
+		if (result == 1)
 			continue ;
-		}
-		if (result == 3)
-		{
-			*got_sigint = true;
-			break ;
-		}
-		if (result == 2)
-			break ;
+		break ;
 	}
 	return (-1);
 }
